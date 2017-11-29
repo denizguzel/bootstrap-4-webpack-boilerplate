@@ -1,0 +1,18 @@
+@import "custom";
+
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100vh;
+  .bootstrap {
+    color: $bootstrap;
+  }
+  .font-awesome {
+    color: $font-awesome;
+  }
+  .webpack {
+    color: $webpack;
+  }
+}
