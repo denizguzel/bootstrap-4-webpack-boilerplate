@@ -8,14 +8,17 @@ const relativePath = path.resolve(__dirname, '../');
 module.exports = merge(common, {
   watch: true,
   devtool: 'source-map',
+  mode: 'development',
   plugins: [
-    new BrowserSyncPlugin({
-      host: 'localhost',
-      server: 'dist'
-    }, {
-      reload: true,
-      open: true
-    }),
+    new BrowserSyncPlugin(
+      {
+        host: 'localhost',
+        server: 'dist'
+      },
+      {
+        reload: true,
+        open: true
+      }),
     new CleanWebpackPlugin(['dist'], {
       root: relativePath
     })

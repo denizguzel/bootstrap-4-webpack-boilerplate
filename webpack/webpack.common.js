@@ -1,6 +1,5 @@
 const path = require('path');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
-const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const relativePath = path.resolve(__dirname, '../');
@@ -17,16 +16,26 @@ const postcssLoader = {
 module.exports = {
   context: relativePath,
   entry: [
-    './node_modules/font-awesome/css/font-awesome.css',
-    '@babel/polyfill',
     './src/js/index.js'
   ],
   output: {
     path: relativePath + '/dist',
     filename: 'bundle.js'
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          chunks: "initial",
+          test: path.resolve(__dirname, "../node_modules"),
+          name: "vendor",
+          enforce: true
+        }
+      }
+    }
+  },
   plugins: [
-    new ProvidePlugin({
+    new webpack.ProvidePlugin({
       $: 'jquery',
       jQuery: 'jquery',
       'window.jQuery': 'jquery',
@@ -38,14 +47,6 @@ module.exports = {
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
-    }),
-    new CommonsChunkPlugin({
-      name: 'vendor',
-      filename: 'vendor.bundle.js',
-      minChunks: function (module) {
-        const context = module.context;
-        return context && context.indexOf('node_modules') >= 0;
-      }
     })
   ],
   module: {
@@ -53,9 +54,11 @@ module.exports = {
       {
         test: /\.js?$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        options: {
-          presets: ['@babel/preset-env']
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-env']
+          }
         }
       },
       {

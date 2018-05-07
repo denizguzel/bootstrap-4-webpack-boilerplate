@@ -11,6 +11,7 @@ module.exports = merge(common, {
     path: relativePath + '/prod',
     filename: 'bundle.js'
   },
+  mode: 'production',
   plugins: [
     new UglifyJsPlugin(), //minify everything
     new AggressiveMergingPlugin(), //Merge chunks
